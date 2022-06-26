@@ -12,3 +12,7 @@ KoffeeBot is a multifunctional discord bot designed to do numerous tasks, but fo
 - Images
 - Mafia
 - Misc
+
+Visit my [top.gg](https://top.gg/bot/901223515242508309) page
+Join the [support discord](https://discord.gg/fa3j7fpbA6)
+[Invite](https://top.gg/bot/901223515242508309?s=0210af7e1c4e5) my bot

@@ -4,7 +4,7 @@ I took upon this project as a fun way to practice my newly learned skills and ha
 
 KoffeeBot is a multifunctional discord bot designed to do numerous tasks, but for the most part; to entertain.
 
-KoffeeBot's categories include:
+**KoffeeBot's categories include:**
 - Economy
 - Games
 - Moderation

@@ -15,4 +15,4 @@ KoffeeBot is a multifunctional discord bot designed to do numerous tasks, but fo
 
 Visit my [top.gg](https://top.gg/bot/901223515242508309) page.
 Join the [support discord](https://discord.gg/fa3j7fpbA6).
-[Invite](https://top.gg/bot/901223515242508309?s=0210af7e1c4e5) my bot
+[Invite](https://discord.com/oauth2/authorize?client_id=901223515242508309&scope=bot) my bot.

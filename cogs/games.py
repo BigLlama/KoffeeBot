@@ -115,51 +115,85 @@ class games(commands.Cog):
                                   color=discord.Color.orange())
             await ctx.send(embed=embed)
 
-        # @client.command(name='fight', aliases=['duel', '1v1'])
-        # @commands.cooldown(1, 15, commands.BucketType.user)
-        # async def fight(ctx, member: discord.Member):
-        #
-        #     health = 100
-        #     tactics = ['punch', 'kick', 'dodge']
-        #
-        #     embed = discord.Embed(title='Duel!',
-        #                           description=f'{member.mention}, {ctx.author.name} has challenged you to a fight to the death\n'
-        #                                       f'Respond by typing either `accept` or `retreat`',
-        #                           color=discord.Color.orange())
-        #     await ctx.send(embed=embed)
-        #
-        #     def check(m):
-        #         return m.author == member
-        #
-        #     try:
-        #         answer = await client.wait_for(event='message', check=check, timeout=7.0)
-        #     except asyncio.TimeoutError:
-        #         client.get_command("fight").reset_cooldown(ctx)
-        #         return await ctx.send("You did not respond in time. Be quicker next time!")
-        #     else:
-        #         if answer.content == 'retreat':
-        #             embed = discord.Embed(description=f'{ctx.author.mention}! {member.name} has declined your challenge', color=discord.Color.orange())
-        #             return await ctx.send(embed=embed)
-        #         elif answer.content == 'accept':
-        #             first = random.choice([f'{ctx.author.name}', f'{member.name}'])
-        #
-        #             embed = discord.Embed(description=f'Duel: {ctx.author.name} VS {member.name}. {first} goes first', color=discord.Color.orange())
-        #             embed.add_field(name=ctx.author.name, value=f"Health: {health}", inline=True)
-        #             embed.add_field(name=member.name, value=f"Health: {health}", inline=True)
-        #             await ctx.send(embed=embed)
-        #
-        #             embed = discord.Embed(description='Choose an action:\nPunch\nKick\nDodge')
-        #             await ctx.send(embed=embed)
-        #
-        #             try:
-        #                 action = await client.wait_for(event='message', check=check, timeout=7.0)
-        #                 for i in range(len(tactics)):
-        #                     if action == tactics[i]:
-        #                         pass
-        #             except asyncio.TimeoutError:
-        #                 pass
-        #             else:
-        #                 pass
+        @client.command(name='fight', aliases=['duel', '1v1'])
+        @commands.cooldown(1, 10, commands.BucketType.user)
+        async def fight(ctx, member: discord.Member):
+
+            p1 = 100
+            p2 = 100
+            done = False
+
+            if member == ctx.author:
+                client.get_command("fight").reset_cooldown(ctx)
+                return await ctx.send("You can not fight yourself!")
+
+
+            embed = discord.Embed(title='Duel!',
+                                  description=f'{member.mention}, {ctx.author.name} has challenged you to a fight to the death\n'
+                                              f'Respond by typing either `accept` or `retreat`',
+                                  color=discord.Color.orange())
+            await ctx.send(embed=embed)
+
+            def check(m):
+                return m.author == member
+
+            try:
+                answer = await client.wait_for(event='message', check=check, timeout=10.0)
+            except asyncio.TimeoutError:
+                client.get_command("fight").reset_cooldown(ctx)
+                return await ctx.send("You did not respond in time. Be quicker next time!")
+            else:
+                if answer.content.lower() == 'retreat':
+                    embed = discord.Embed(description=f'{ctx.author.mention}! {member.name} has declined your challenge', color=discord.Color.orange())
+                    return await ctx.send(embed=embed)
+                elif answer.content.lower() == 'accept':
+                    embed = discord.Embed(
+                        description=f'Duel: {ctx.author.name} & {member.name} are fighting to the death',
+                        color=discord.Color.orange())
+                    embed.add_field(name=ctx.author.name, value=f"Health: {p1}", inline=True)
+                    embed.add_field(name=member.name, value=f"Health: {p2}", inline=True)
+                    msg = await ctx.send(embed=embed)
+
+                    while done is False:
+                        e = discord.Embed(
+                            description=f'Duel: {ctx.author.name} & {member.name} are fighting to the death',
+                            color=discord.Color.orange())
+                        e.add_field(name=ctx.author.name, value=f"Health: {p1}", inline=True)
+                        e.add_field(name=member.name, value=f"Health: {p2}", inline=True)
+
+                        damage = random.randint(4, 17)
+
+                        turn = random.randint(1, 2)
+                        if turn == 1:
+                            if p1 < 25:
+                                damage = random.randint(1,3)
+                            p1 = p1 - damage
+                            if p1 - damage <= 0:
+                                p1 = 0
+                        elif turn == 2:
+                            if p2 < 25:
+                                damage = random.randint(1,3)
+                            p2 = p2 - damage
+                            if p2 - damage <= 0:
+                                p2 = 0
+
+                        time.sleep(1)
+                        await msg.edit(embed=e)
+
+                        if p1 == 0:
+                            f = discord.Embed(
+                                description=f'{member.mention} has defeated {ctx.author.mention} and won the fight!',
+                                color=discord.Color.orange())
+                            f.add_field(name=ctx.author.name, value=f"Health: 0", inline=True)
+                            f.add_field(name=member.name, value=f"Health: {p2}", inline=True)
+                            return await msg.edit(embed=f)
+                        elif p2 == 0:
+                            f = discord.Embed(
+                                description=f'{ctx.author.mention} has defeated {member.mention} and won the fight!',
+                                color=discord.Color.orange())
+                            f.add_field(name=ctx.author.name, value=f"Health: {p1}", inline=True)
+                            f.add_field(name=member.name, value=f"Health: 0", inline=True)
+                            return await msg.edit(embed=f)
 
 
 

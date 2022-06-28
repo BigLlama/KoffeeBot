@@ -196,6 +196,5 @@ class games(commands.Cog):
                             return await msg.edit(embed=f)
 
 
-
 def setup(bot):
     bot.add_cog(games(bot))
